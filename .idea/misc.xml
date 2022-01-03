@@ -4,6 +4,12 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Akademi/PCS/AppToko/app/src/main/res/layout/activity_login.xml" value="0.25" />
+        <entry key="..\:/Akademi/PCS/AppToko/app/src/main/res/layout/activity_main.xml" value="0.22" />
+        <entry key="..\:/Akademi/PCS/AppToko/app/src/main/res/layout/fragment_about.xml" value="0.18854166666666666" />
+        <entry key="..\:/Akademi/PCS/AppToko/app/src/main/res/layout/fragment_laporan.xml" value="0.18854166666666666" />
+        <entry key="..\:/Akademi/PCS/AppToko/app/src/main/res/layout/fragment_produk.xml" value="0.18854166666666666" />
+        <entry key="..\:/Akademi/PCS/AppToko/app/src/main/res/layout/fragment_transaksi.xml" value="0.18854166666666666" />
+        <entry key="..\:/Akademi/PCS/AppToko/app/src/main/res/menu/bottom_nav.xml" value="0.67" />
       </map>
     </option>
   </component>
