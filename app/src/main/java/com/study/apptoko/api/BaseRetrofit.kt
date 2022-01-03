@@ -6,8 +6,9 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class BaseRetrofit {
+    // Inisialisasi variabel
     val endpoint : ApiEndpoint
-
+        // Metode getter
         get(){
             val interceptor = HttpLoggingInterceptor()
             interceptor.level = HttpLoggingInterceptor.Level.BODY

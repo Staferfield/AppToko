@@ -6,6 +6,7 @@ import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
 
+// Interface untuk pengiriman data HTTP
 interface ApiEndpoint {
     @FormUrlEncoded
     @POST("login")
