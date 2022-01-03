@@ -1,10 +1,9 @@
 package com.study.apptoko.api
 
 import com.study.apptoko.response.login.LoginResponse
+import com.study.apptoko.response.produk.ProdukResponse
 import retrofit2.Call
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.POST
+import retrofit2.http.*
 
 // Interface untuk pengiriman data HTTP
 interface ApiEndpoint {
@@ -14,5 +13,8 @@ interface ApiEndpoint {
         @Field("email") email : String,
         @Field("password") password : String
     ) : Call<LoginResponse>
+
+    @GET("produk")
+    fun getProduk(@Header("Authorization") token : String) : Call<ProdukResponse>
 
 }
