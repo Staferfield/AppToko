@@ -22,7 +22,7 @@ class LoginActivity : AppCompatActivity() {
         private lateinit var context: Context
     }
 
-    // inisialisasi variabel
+    // inisialisasi API
     // sama dengan private val api = BaseRetrofit().endpoint, tetapi by lazy lebih optimal untuk memory karena hanya akan di inisialisasi saat digunakan
     private val api by lazy { BaseRetrofit().endpoint }
 
@@ -67,6 +67,7 @@ class LoginActivity : AppCompatActivity() {
                             // Simpan data token ke Shared Preferences
                             sessionManager.saveString("TOKEN", "Bearer "+token)
                             sessionManager.saveBoolean("LOGIN_STATUS", true)
+                            sessionManager.saveString("ADMIN_ID", response.body()!!.data.admin.id.toString())
 
                             // Pindah ke MainActivity
                             val moveIntent = Intent(this@LoginActivity, MainActivity::class.java)
