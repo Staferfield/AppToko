@@ -29,5 +29,14 @@
         android:id="@+id/produkFormFragment"
         android:name="com.study.apptoko.ProdukFormFragment"
         android:label="fragment_produk_form"
-        tools:layout="@layout/fragment_produk_form" />
+        tools:layout="@layout/fragment_produk_form" >
+        <argument
+            android:name="argsProduk"
+            app:argType="com.study.apptoko.response.produk.Produk"
+            app:nullable="true" />
+        <argument
+            android:name="argsStatus"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
 </navigation>

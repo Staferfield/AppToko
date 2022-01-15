@@ -7,10 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputEditText
 import com.study.apptoko.api.BaseRetrofit
+import com.study.apptoko.response.produk.Produk
 import com.study.apptoko.response.produk.ProdukResponsePost
 import retrofit2.Call
 import retrofit2.Callback
@@ -28,6 +30,22 @@ class ProdukFormFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_produk_form, container, false)
 
         val btnProsesProduk = view.findViewById<Button>(R.id.btnProsesProduk)
+
+        val txtFormNama = view.findViewById<TextView>(R.id.txtFormNama)
+        val txtFormHarga = view.findViewById<TextView>(R.id.txtFormHarga)
+        val txtFormStok = view.findViewById<TextView>(R.id.txtFormStok)
+
+        val status = arguments?.getString("status")
+        val produk = arguments?.getParcelable<Produk>("produk")
+
+        Log.d("produkForm",produk.toString())
+
+        if (status=="edit"){
+            txtFormNama.setText(produk?.nama.toString())
+            txtFormHarga.setText(produk?.harga.toString())
+            txtFormStok.setText(produk?.stok.toString())
+        }
+
         btnProsesProduk.setOnClickListener{
             val txtFormNama = view.findViewById<TextInputEditText>(R.id.txtFormNama)
             val txtFormHarga = view.findViewById<TextInputEditText>(R.id.txtFormHarga)
@@ -36,26 +54,46 @@ class ProdukFormFragment : Fragment() {
             val token = LoginActivity.sessionManager.getString("TOKEN")
             val adminId = LoginActivity.sessionManager.getString("ADMIN_ID")
 
-            api.postProduk(token.toString(), adminId.toString().toInt(), txtFormNama.text.toString(), txtFormHarga.text.toString().toInt(), txtFormStok.text.toString().toInt()).enqueue(
-                object :
-                    Callback<ProdukResponsePost> {
-                    override fun onResponse(
-                        call: Call<ProdukResponsePost>,
-                        response: Response<ProdukResponsePost>
-                    ) {
-                        Log.d("ProdukError", response.toString())
-                        Toast.makeText(activity?.applicationContext, "Data di input", Toast.LENGTH_LONG).show()
+            if (status=="edit"){
+                // Edit Produk
+                api.putProduk(token.toString(), produk?.id.toString().toInt(), adminId.toString().toInt(), txtFormNama.text.toString(), txtFormHarga.text.toString().toInt(), txtFormStok.text.toString().toInt()).enqueue(
+                    object :
+                        Callback<ProdukResponsePost> {
+                        override fun onResponse(
+                            call: Call<ProdukResponsePost>,
+                            response: Response<ProdukResponsePost>
+                        ) {
+                            Log.d("ResponData", response.body()!!.data.toString())
+                            Toast.makeText(activity?.applicationContext, "Data "+response.body()!!.data.produk.nama.toString()+" di edit", Toast.LENGTH_LONG).show()
 
-                        findNavController().navigate(R.id.produkFragment)
-
+                            findNavController().navigate(R.id.produkFragment)
+                        }
+                        override fun onFailure(call: Call<ProdukResponsePost>, t: Throwable) {
+                            Log.e("Error", t.toString())
+                        }
                     }
+                )
+            } else{
+                // Tambah Produk
+                api.postProduk(token.toString(), adminId.toString().toInt(), txtFormNama.text.toString(), txtFormHarga.text.toString().toInt(), txtFormStok.text.toString().toInt()).enqueue(
+                    object :
+                        Callback<ProdukResponsePost> {
+                        override fun onResponse(
+                            call: Call<ProdukResponsePost>,
+                            response: Response<ProdukResponsePost>
+                        ) {
+                            Log.d("Data", response.toString())
+                            Toast.makeText(activity?.applicationContext, "Data di input", Toast.LENGTH_LONG).show()
 
-                    override fun onFailure(call: Call<ProdukResponsePost>, t: Throwable) {
-                        Log.e("Error", t.toString())
+                            findNavController().navigate(R.id.produkFragment)
+                        }
+                        override fun onFailure(call: Call<ProdukResponsePost>, t: Throwable) {
+                            Log.e("Error", t.toString())
+                        }
                     }
+                )
+            }
 
-                }
-            )
         }
 
         return view

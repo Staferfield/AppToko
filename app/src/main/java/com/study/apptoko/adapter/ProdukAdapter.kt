@@ -1,5 +1,6 @@
 package com.study.apptoko.adapter
 
+import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -59,6 +60,16 @@ class ProdukAdapter(val listProduk: List<Produk>):RecyclerView.Adapter<ProdukAda
                 }
             )
         }
+        holder.btnEdit.setOnClickListener {
+            Toast.makeText(holder.itemView.context, "Edit "+produk.nama, Toast.LENGTH_LONG).show()
+
+            val bundle = Bundle()
+            bundle.putParcelable("produk",produk)
+            bundle.putString("status","edit")
+
+            holder.itemView.findNavController().navigate(R.id.produkFormFragment,bundle)
+        }
+
     }
 
     override fun getItemCount(): Int {
@@ -69,5 +80,6 @@ class ProdukAdapter(val listProduk: List<Produk>):RecyclerView.Adapter<ProdukAda
         val txtNamaProduk = itemView.findViewById(R.id.txtNamaProduk) as TextView
         val txtHarga = itemView.findViewById(R.id.txtHarga) as TextView
         val btnDelete = itemView.findViewById(R.id.btnDelete) as ImageButton
+        val btnEdit = itemView.findViewById(R.id.btnEdit) as ImageButton
     }
 }
