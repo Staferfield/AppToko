@@ -4,6 +4,7 @@ import com.study.apptoko.response.itemTransaksi.ItemTransaksiResponsePost
 import com.study.apptoko.response.login.LoginResponse
 import com.study.apptoko.response.produk.ProdukResponse
 import com.study.apptoko.response.produk.ProdukResponsePost
+import com.study.apptoko.response.transaksi.TransaksiResponse
 import com.study.apptoko.response.transaksi.TransaksiResponsePost
 import retrofit2.Call
 import retrofit2.http.*
@@ -31,7 +32,7 @@ interface ApiEndpoint {
     ) : Call<ProdukResponsePost>
 
     @FormUrlEncoded
-    // @DELETE("produk") // Eror tidak digunakan bersama @FormUrlEncoded
+    // @DELETE("produk") // Eror tidak bisa digunakan bersama @FormUrlEncoded
     @HTTP(method = "DELETE", path = "produk", hasBody = true)
     fun deleteProduk(
         @Header("Authorization") token : String,
@@ -66,5 +67,8 @@ interface ApiEndpoint {
         @Field("qty") qty : Int,
         @Field("harga_saat_transaksi") harga : Int
     ) : Call<ItemTransaksiResponsePost>
+
+    @GET("transaksi_bulan_ini")
+    fun getTransaksi(@Header("Authorization") token : String) : Call<TransaksiResponse>
 
 }
