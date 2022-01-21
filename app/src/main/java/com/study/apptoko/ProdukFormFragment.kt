@@ -28,6 +28,7 @@ class ProdukFormFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_produk_form, container, false)
+        val txtHalamanProduk = view.findViewById<TextView>(R.id.txtHalamanProduk)
 
         val btnProsesProduk = view.findViewById<Button>(R.id.btnProsesProduk)
 
@@ -41,6 +42,7 @@ class ProdukFormFragment : Fragment() {
         Log.d("produkForm",produk.toString())
 
         if (status=="edit"){
+            txtHalamanProduk.setText("Edit " + produk?.nama)
             txtFormNama.setText(produk?.nama.toString())
             txtFormHarga.setText(produk?.harga.toString())
             txtFormStok.setText(produk?.stok.toString())

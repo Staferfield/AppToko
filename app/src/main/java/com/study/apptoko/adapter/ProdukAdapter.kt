@@ -1,5 +1,6 @@
 package com.study.apptoko.adapter
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,7 +10,6 @@ import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.study.apptoko.LoginActivity
 import com.study.apptoko.R
@@ -19,6 +19,8 @@ import com.study.apptoko.response.produk.ProdukResponsePost
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.NumberFormat
+import java.util.*
 
 class ProdukAdapter(val listProduk: List<Produk>):RecyclerView.Adapter<ProdukAdapter.ViewHolder>() {
 
@@ -32,10 +34,20 @@ class ProdukAdapter(val listProduk: List<Produk>):RecyclerView.Adapter<ProdukAda
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val produk = listProduk[position]
         holder.txtNamaProduk.text = produk.nama
-        holder.txtHarga.text = produk.harga
+        // Format ke rupiah
+        val localeID =  Locale("in", "ID")
+        val numberFormat = NumberFormat.getCurrencyInstance(localeID)
+
+        holder.txtHarga.text = numberFormat.format(produk.harga.toDouble()).toString()
+        if (produk.stok.toInt() > 0){
+            holder.txtStok.text = "Tersedia " + produk.stok
+        } else{
+            holder.txtStok.text = "Stok habis"
+            holder.txtStok.setTextColor(Color.RED)
+        }
 
         holder.btnDelete.setOnClickListener {
-            Toast.makeText(holder.itemView.context,produk.nama.toString(), Toast.LENGTH_LONG).show()
+            Toast.makeText(holder.itemView.context,produk.nama, Toast.LENGTH_LONG).show()
 
             val token = LoginActivity.sessionManager.getString("TOKEN")
 
@@ -79,6 +91,7 @@ class ProdukAdapter(val listProduk: List<Produk>):RecyclerView.Adapter<ProdukAda
     class ViewHolder(ItemView : View) : RecyclerView.ViewHolder(ItemView){
         val txtNamaProduk = itemView.findViewById(R.id.txtNamaProduk) as TextView
         val txtHarga = itemView.findViewById(R.id.txtHarga) as TextView
+        val txtStok = itemView.findViewById(R.id.txtStok) as TextView
         val btnDelete = itemView.findViewById(R.id.btnDelete) as ImageButton
         val btnEdit = itemView.findViewById(R.id.btnEdit) as ImageButton
     }
