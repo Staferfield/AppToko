@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -39,11 +40,21 @@ class TransaksiFragment : Fragment() {
 
         val btnBayar =  view.findViewById<Button>(R.id.btnBayar)
         btnBayar.setOnClickListener {
-            val bundle = Bundle()
-            bundle.putParcelableArrayList("MY_CART", my_cart)
-            bundle.putString("TOTAL", total_bayar)
+            // Memastikan my_cart sudah di inisialisasi (lateinit)
+            if (this::my_cart.isInitialized) {
+                // Memastikan ada produk yang dibeli sebelum dibayar
+                if(my_cart.isEmpty()){
+                    Toast.makeText(activity?.applicationContext, "Tidak ada produk yang dibeli", Toast.LENGTH_LONG).show()
+                }else{
+                    val bundle = Bundle()
+                    bundle.putParcelableArrayList("MY_CART", my_cart)
+                    bundle.putString("TOTAL", total_bayar)
 
-            findNavController().navigate(R.id.bayarFragment, bundle)
+                    findNavController().navigate(R.id.bayarFragment, bundle)
+                }
+            }else{
+                Toast.makeText(activity?.applicationContext, "Tidak ada produk yang dibeli", Toast.LENGTH_LONG).show()
+            }
         }
 
         return view

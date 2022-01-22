@@ -1,10 +1,12 @@
 package com.study.apptoko.adapter
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.study.apptoko.CallbackInterface
 import com.study.apptoko.R
@@ -28,7 +30,13 @@ class TransaksiAdapter (val listProduk: List<Produk>): RecyclerView.Adapter<Tran
     override fun onBindViewHolder(holder: TransaksiAdapter.ViewHolder, position: Int) {
         val produk = listProduk[position]
         holder.txtNamaProduk.text = produk.nama
-
+        // Tampilkan jumlah stok yg tersedia
+        if (produk.stok.toInt() > 0){
+            holder.txtTransaksiStok.text = "Tersedia " + produk.stok
+        } else{
+            holder.txtTransaksiStok.text = "Stok habis"
+            holder.txtTransaksiStok.setTextColor(Color.RED)
+        }
         // Format ke rupiah
         val localeID =  Locale("in", "ID")
         val numberFormat = NumberFormat.getCurrencyInstance(localeID)
@@ -39,21 +47,30 @@ class TransaksiAdapter (val listProduk: List<Produk>): RecyclerView.Adapter<Tran
             val old_value = holder.txtQty.text.toString().toInt()
             val new_value = old_value+1
 
-            holder.txtQty.setText(new_value.toString())
-            // Rubah nilai Total
-            total = total + produk.harga.toString().toInt()
+            // Tidak bisa tambah lebih dari stok yg ada
+            if(new_value > produk.stok.toInt()){
+                Toast.makeText(holder.itemView.context, "Stok kurang", Toast.LENGTH_LONG).show()
+            }else{
+                holder.txtQty.setText(new_value.toString())
+                val subtotal = produk.harga.toInt() * new_value
+                holder.txtTransaksiSubtotal.setText(numberFormat.format(subtotal.toDouble()).toString())
 
-            // Cek apabila sudah ada data di cart, kemudian hapus
-            val index = cart.indexOfFirst { it.id == produk.id.toInt() }.toInt()
-            if(index!=-1){
-                cart.removeAt(index)
+                // Rubah nilai Total
+                total = total + produk.harga.toString().toInt()
+
+                // Cek apabila sudah ada data di cart, kemudian hapus
+                val index = cart.indexOfFirst { it.id == produk.id.toInt() }.toInt()
+                if(index!=-1){
+                    cart.removeAt(index)
+                }
+                // Tambahkan data cart baru
+                val itemCart = Cart(produk.id.toInt(),produk.harga.toInt(),new_value)
+                cart.add(itemCart)
+
+                // Kirim data total bayar dan cart baru
+                callbackInterface?.passResultCallback(total.toString(),cart)
             }
-            // Tambahkan data cart baru
-            val itemCart = Cart(produk.id.toInt(),produk.harga.toInt(),new_value)
-            cart.add(itemCart)
 
-            // Kirim data total bayar dam cart baru
-            callbackInterface?.passResultCallback(total.toString(),cart)
         }
 
         holder.btnMinus.setOnClickListener {
@@ -70,6 +87,8 @@ class TransaksiAdapter (val listProduk: List<Produk>): RecyclerView.Adapter<Tran
             // Biarkan data terhapus apabila jumlah nol
             if (new_value>=0){
                 holder.txtQty.setText(new_value.toString())
+                val subtotal = produk.harga.toInt() * new_value
+                holder.txtTransaksiSubtotal.setText(numberFormat.format(subtotal.toDouble()).toString())
 
                 total = total - produk.harga.toString().toInt()
             }
@@ -93,6 +112,8 @@ class TransaksiAdapter (val listProduk: List<Produk>): RecyclerView.Adapter<Tran
     class ViewHolder(ItemView : View) : RecyclerView.ViewHolder(ItemView) {
         val txtNamaProduk = itemView.findViewById(R.id.txtNamaProduk) as TextView
         val txtHarga = itemView.findViewById(R.id.txtHarga) as TextView
+        val txtTransaksiStok = itemView.findViewById(R.id.txtTransaksiStok) as TextView
+        val txtTransaksiSubtotal = itemView.findViewById(R.id.txtTransaksiSubtotal) as TextView
         val txtQty = itemView.findViewById(R.id.txtQty) as TextView
         val btnPlus = itemView.findViewById(R.id.btnPlus) as ImageButton
         val btnMinus = itemView.findViewById(R.id.btnMinus) as ImageButton
