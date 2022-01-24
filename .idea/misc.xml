@@ -7,13 +7,17 @@
         <entry key="..\:/Akademi/PCS/AppToko/app/src/main/res/layout/activity_main.xml" value="0.22" />
         <entry key="..\:/Akademi/PCS/AppToko/app/src/main/res/layout/fragment_about.xml" value="0.18854166666666666" />
         <entry key="..\:/Akademi/PCS/AppToko/app/src/main/res/layout/fragment_bayar.xml" value="0.33" />
+        <entry key="..\:/Akademi/PCS/AppToko/app/src/main/res/layout/fragment_detail_laporan.xml" value="0.2513586956521739" />
+        <entry key="..\:/Akademi/PCS/AppToko/app/src/main/res/layout/fragment_detail_transaksi.xml" value="0.33" />
         <entry key="..\:/Akademi/PCS/AppToko/app/src/main/res/layout/fragment_laporan.xml" value="0.18854166666666666" />
+        <entry key="..\:/Akademi/PCS/AppToko/app/src/main/res/layout/fragment_nota.xml" value="0.33" />
         <entry key="..\:/Akademi/PCS/AppToko/app/src/main/res/layout/fragment_produk.xml" value="0.33" />
         <entry key="..\:/Akademi/PCS/AppToko/app/src/main/res/layout/fragment_produk_form.xml" value="0.22" />
         <entry key="..\:/Akademi/PCS/AppToko/app/src/main/res/layout/fragment_transaksi.xml" value="0.33" />
-        <entry key="..\:/Akademi/PCS/AppToko/app/src/main/res/layout/item_laporan.xml" value="0.25" />
+        <entry key="..\:/Akademi/PCS/AppToko/app/src/main/res/layout/item_laporan.xml" value="0.22" />
+        <entry key="..\:/Akademi/PCS/AppToko/app/src/main/res/layout/item_nota.xml" value="0.25" />
         <entry key="..\:/Akademi/PCS/AppToko/app/src/main/res/layout/item_produk.xml" value="0.33" />
-        <entry key="..\:/Akademi/PCS/AppToko/app/src/main/res/layout/item_transaksi.xml" value="0.25" />
+        <entry key="..\:/Akademi/PCS/AppToko/app/src/main/res/layout/item_transaksi.xml" value="0.33" />
         <entry key="..\:/Akademi/PCS/AppToko/app/src/main/res/menu/bottom_nav.xml" value="0.67" />
       </map>
     </option>

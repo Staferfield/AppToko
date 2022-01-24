@@ -2,6 +2,7 @@ package com.study.apptoko.api
 
 import com.study.apptoko.response.itemTransaksi.ItemTransaksiResponsePost
 import com.study.apptoko.response.login.LoginResponse
+import com.study.apptoko.response.nota.NotaResponse
 import com.study.apptoko.response.produk.ProdukResponse
 import com.study.apptoko.response.produk.ProdukResponsePost
 import com.study.apptoko.response.transaksi.TransaksiResponse
@@ -70,5 +71,11 @@ interface ApiEndpoint {
 
     @GET("transaksi_bulan_ini")
     fun getTransaksi(@Header("Authorization") token : String) : Call<TransaksiResponse>
+
+    @GET("item_transaksi_by_transaksi_id")
+    fun getNota(
+        @Header("Authorization") token : String,
+        @Query("transaksi_id") transaksi_id : Int
+    ) : Call<NotaResponse>
 
 }

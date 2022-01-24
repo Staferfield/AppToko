@@ -51,4 +51,12 @@
             android:name="argsTotal"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/notaFragment"
+        android:name="com.study.apptoko.NotaFragment"
+        android:label="fragment_nota"
+        tools:layout="@layout/fragment_nota" >
+        <argument android:name="argsNota"
+            app:argType="com.study.apptoko.response.transaksi.Transaksi" />
+    </fragment>
 </navigation>
