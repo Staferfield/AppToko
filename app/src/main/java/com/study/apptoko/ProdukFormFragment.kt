@@ -1,5 +1,6 @@
 package com.study.apptoko
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -66,9 +67,25 @@ class ProdukFormFragment : Fragment() {
                             response: Response<ProdukResponsePost>
                         ) {
                             Log.d("ResponData", response.body()!!.data.toString())
-                            Toast.makeText(activity?.applicationContext, "Data "+response.body()!!.data.produk.nama.toString()+" di edit", Toast.LENGTH_LONG).show()
 
-                            findNavController().navigate(R.id.produkFragment)
+                            // Handle opabila token expired
+                            val success = response.body()!!.success
+                            if(success==false){     // Cek apakah gagal
+                                val message = response.body()!!.message
+                                if (message == "Token tidak valid"){    // Cek apakah eror karena token expired
+                                    Toast.makeText(activity?.applicationContext, "Token expired, silahkan login kembali", Toast.LENGTH_LONG).show()
+                                    // Hapus data session
+                                    LoginActivity.sessionManager.clearSession()
+                                    // Pindah ke activity login
+                                    val moveIntent = Intent(activity, LoginActivity::class.java)
+                                    startActivity(moveIntent)
+                                    activity?.finish()
+                                }
+                            }else {
+                                Toast.makeText(activity?.applicationContext,"Data " + response.body()!!.data.produk.nama.toString() + " di edit", Toast.LENGTH_LONG).show()
+
+                                findNavController().navigate(R.id.produkFragment)
+                            }
                         }
                         override fun onFailure(call: Call<ProdukResponsePost>, t: Throwable) {
                             Log.e("Error", t.toString())
@@ -85,9 +102,25 @@ class ProdukFormFragment : Fragment() {
                             response: Response<ProdukResponsePost>
                         ) {
                             Log.d("Data", response.toString())
-                            Toast.makeText(activity?.applicationContext, "Data di input", Toast.LENGTH_LONG).show()
 
-                            findNavController().navigate(R.id.produkFragment)
+                            // Handle opabila token expired
+                            val success = response.body()!!.success
+                            if(success==false){     // Cek apakah gagal
+                                val message = response.body()!!.message
+                                if (message == "Token tidak valid"){    // Cek apakah eror karena token expired
+                                    Toast.makeText(activity?.applicationContext, "Token expired, silahkan login kembali", Toast.LENGTH_LONG).show()
+                                    // Hapus data session
+                                    LoginActivity.sessionManager.clearSession()
+                                    // Pindah ke activity login
+                                    val moveIntent = Intent(activity, LoginActivity::class.java)
+                                    startActivity(moveIntent)
+                                    activity?.finish()
+                                }
+                            }else {
+                                Toast.makeText(activity?.applicationContext,"Data di input",Toast.LENGTH_LONG).show()
+
+                                findNavController().navigate(R.id.produkFragment)
+                            }
                         }
                         override fun onFailure(call: Call<ProdukResponsePost>, t: Throwable) {
                             Log.e("Error", t.toString())

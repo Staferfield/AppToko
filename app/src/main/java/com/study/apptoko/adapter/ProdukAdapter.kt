@@ -1,5 +1,7 @@
 package com.study.apptoko.adapter
 
+import android.app.Activity
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -58,15 +60,35 @@ class ProdukAdapter(val listProduk: List<Produk>):RecyclerView.Adapter<ProdukAda
                         call: Call<ProdukResponsePost>,
                         response: Response<ProdukResponsePost>
                     ) {
-                        Log.d("ProdukError", response.toString())
-                        Toast.makeText(holder.itemView.context, "Data di hapus", Toast.LENGTH_LONG).show()
+                        Log.d("DeleteData", response.toString())
 
-                        holder.itemView.findNavController().navigate(R.id.produkFragment)
+                        // Handle opabila token expired
+                        val success = response.body()!!.success
+                        if(success==false){     // Cek apakah gagal
+                            val message = response.body()!!.message
+                            if (message == "Token tidak valid"){    // Cek apakah eror karena token expired
+                                Toast.makeText(holder.itemView.context, "Token expired, silahkan login kembali "+produk.nama, Toast.LENGTH_LONG).show()
+                                // Hapus data session
+                                LoginActivity.sessionManager.clearSession()
+                                // Pindah ke activity login
+                                val context=holder.txtNamaProduk.context
+                                val moveIntent = Intent( context, LoginActivity::class.java)
+                                context.startActivity(moveIntent)
+                                (context as Activity).finish()
+                            }
+                        }else {
+                            Toast.makeText(
+                                holder.itemView.context,
+                                "Data di hapus",
+                                Toast.LENGTH_LONG
+                            ).show()
 
+                            holder.itemView.findNavController().navigate(R.id.produkFragment)
+                        }
                     }
 
                     override fun onFailure(call: Call<ProdukResponsePost>, t: Throwable) {
-                        Log.e("Data", t.toString())
+                        Log.e("ProdukError", t.toString())
                     }
 
                 }

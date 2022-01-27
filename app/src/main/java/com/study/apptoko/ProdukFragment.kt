@@ -1,5 +1,6 @@
 package com.study.apptoko
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -8,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -34,8 +36,6 @@ class ProdukFragment : Fragment() {
 
         val btnTambah = view.findViewById<Button>(R.id.btnTambah)
         btnTambah.setOnClickListener{
-//            Toast.makeText(activity?.applicationContext, "Click", Toast.LENGTH_LONG).show()
-
             val bundle = Bundle()
             bundle.putString("status","tambah")
 
@@ -57,16 +57,32 @@ class ProdukFragment : Fragment() {
                 // Log d -> log debug
                 Log.d("ProdukData", response.body().toString())
 
-                val txtTotalProduk = view.findViewById(R.id.txtTotalProduk) as TextView
-                // Tampilkan data produk menggunakan recycler view
-                val rv = view.findViewById(R.id.rv_produk) as RecyclerView
+                // Handle opabila token expired
+                val success = response.body()!!.success
+                if(success==false){     // Cek apakah gagal
+                    val message = response.body()!!.message
+                    if (message == "Token tidak valid"){    // Cek apakah eror karena token expired
+                        Toast.makeText(activity?.applicationContext, "Token expired, silahkan login kembali", Toast.LENGTH_LONG).show()
+                        // Hapus data session
+                        sessionManager.clearSession()
+                        // Pindah ke activity login
+                        val moveIntent = Intent(activity, LoginActivity::class.java)
+                        startActivity(moveIntent)
+                        activity?.finish()
+                    }
+                }else {
 
-                txtTotalProduk.text = response.body()!!.data.produk.size.toString() + " item"
+                    val txtTotalProduk = view.findViewById(R.id.txtTotalProduk) as TextView
+                    // Tampilkan data produk menggunakan recycler view
+                    val rv = view.findViewById(R.id.rv_produk) as RecyclerView
 
-                rv.setHasFixedSize(true)
-                rv.layoutManager = LinearLayoutManager(activity)
-                val rvAdapter = ProdukAdapter(response.body()!!.data.produk)
-                rv.adapter = rvAdapter
+                    txtTotalProduk.text = response.body()!!.data.produk.size.toString() + " item"
+
+                    rv.setHasFixedSize(true)
+                    rv.layoutManager = LinearLayoutManager(activity)
+                    val rvAdapter = ProdukAdapter(response.body()!!.data.produk)
+                    rv.adapter = rvAdapter
+                }
             }
 
             override fun onFailure(call: Call<ProdukResponse>, t: Throwable) {

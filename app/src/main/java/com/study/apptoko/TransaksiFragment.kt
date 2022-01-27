@@ -1,5 +1,6 @@
 package com.study.apptoko
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -73,33 +74,45 @@ class TransaksiFragment : Fragment() {
                 // Log d -> log debug
                 Log.d("ProdukData", response.body().toString())
 
-//                val txtTotalProduk = view.findViewById(R.id.txtTotalProduk) as TextView
-                // Tampilkan data produk menggunakan recycler view
-                val rv = view.findViewById(R.id.rv_transaksi) as RecyclerView
-
-//                txtTotalProduk.text = response.body()!!.data.produk.size.toString() + " item"
-
-                rv.setHasFixedSize(true)
-                rv.layoutManager = LinearLayoutManager(activity)
-                val rvAdapter = TransaksiAdapter(response.body()!!.data.produk)
-                rv.adapter = rvAdapter
-
-                rvAdapter.callbackInterface = object : CallbackInterface{
-                    override fun passResultCallback(total: String, cart: ArrayList<Cart>) {
-                        val txtTotalBayar = activity?.findViewById<TextView>(R.id.txtTotalBayar)
-
-                        // Format ke rupiah
-                        val localeID =  Locale("in", "ID")
-                        val numberFormat = NumberFormat.getCurrencyInstance(localeID)
-
-                        total_bayar = total
-                        my_cart = cart
-
-                        txtTotalBayar?.setText(numberFormat.format(total.toDouble()).toString())
-
-                        Log.d("MyCart", cart.toString())
+                // Handle opabila token expired
+                val success = response.body()!!.success
+                if(success==false){     // Cek apakah gagal
+                    val message = response.body()!!.message
+                    if (message == "Token tidak valid"){    // Cek apakah eror karena token expired
+                        Toast.makeText(activity?.applicationContext, "Token expired, silahkan login kembali", Toast.LENGTH_LONG).show()
+                        // Hapus data session
+                        LoginActivity.sessionManager.clearSession()
+                        // Pindah ke activity login
+                        val moveIntent = Intent(activity, LoginActivity::class.java)
+                        startActivity(moveIntent)
+                        activity?.finish()
                     }
+                }else {
+                    // Tampilkan data produk menggunakan recycler view
+                    val rv = view.findViewById(R.id.rv_transaksi) as RecyclerView
 
+                    rv.setHasFixedSize(true)
+                    rv.layoutManager = LinearLayoutManager(activity)
+                    val rvAdapter = TransaksiAdapter(response.body()!!.data.produk)
+                    rv.adapter = rvAdapter
+
+                    rvAdapter.callbackInterface = object : CallbackInterface {
+                        override fun passResultCallback(total: String, cart: ArrayList<Cart>) {
+                            val txtTotalBayar = activity?.findViewById<TextView>(R.id.txtTotalBayar)
+
+                            // Format ke rupiah
+                            val localeID = Locale("in", "ID")
+                            val numberFormat = NumberFormat.getCurrencyInstance(localeID)
+
+                            total_bayar = total
+                            my_cart = cart
+
+                            txtTotalBayar?.setText(numberFormat.format(total.toDouble()).toString())
+
+                            Log.d("MyCart", cart.toString())
+                        }
+
+                    }
                 }
             }
 
