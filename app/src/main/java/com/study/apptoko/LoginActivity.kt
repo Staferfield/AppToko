@@ -74,7 +74,7 @@ class LoginActivity : AppCompatActivity() {
                             startActivity(moveIntent)
                             finish()
                         }else{ // Apabila success -> false
-                            Toast.makeText(applicationContext, "User dan password salah", Toast.LENGTH_LONG).show()
+                            Toast.makeText(applicationContext, "Email atau password salah", Toast.LENGTH_LONG).show()
                         }
                     }
                     // Apabila error

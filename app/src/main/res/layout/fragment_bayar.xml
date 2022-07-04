@@ -15,7 +15,7 @@
             android:id="@+id/layoutAtas"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:background="@color/design_default_color_primary"
+            android:background="@color/bg_primary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -115,6 +115,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
+                android:backgroundTint="@color/btn_accent"
                 android:text="SIMPAN"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

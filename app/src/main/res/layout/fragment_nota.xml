@@ -15,7 +15,7 @@
             android:id="@+id/layoutAtas"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:background="@color/design_default_color_primary"
+            android:background="@color/bg_primary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -73,7 +73,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginBottom="60dp"
-            android:background="@color/design_default_color_primary"
+            android:background="@color/bg_primary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
